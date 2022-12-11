@@ -1,0 +1,15 @@
+version: "3.8"
+
+services:
+  kakaotalk:
+    image: jeewangue/docker-kakaotalk
+    restart: on-failure
+    network_mode: host
+    environment:
+      - DISPLAY=${DISPLAY}
+    volumes:
+      - ${XAUTHORITY}:/root/.Xauthority:ro
+      - /tmp/.X11-unix:/tmp/.X11-unix:ro
+    command:
+      - wine
+      - "/home/wineuser/.wine/drive_c/Program Files/Kakao/KakaoTalk/KakaoTalk.exe"

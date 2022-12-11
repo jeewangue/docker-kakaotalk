@@ -1,6 +1,9 @@
 # licensed
 *.exe
 
+# volumes
+volumes/*
+
 # Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode,vim,windows,macos,linux
 # Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,vim,windows,macos,linux
 

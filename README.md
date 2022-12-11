@@ -1,12 +1,15 @@
 # docker-kakaotalk
 
-```bash
-x11docker --xephyr --printenv --xoverip --xauth=no --display=30
-```
+Run Kakaotalk as a docker container on Linux (_finally_).
 
-```bash
-docker build --build-arg DISPLAY=172.17.0.2:30 --network=host -t jeewangue/docker-kakaotalk .
-```
+- This image runs Kakaotalk on wine on Ubuntu.
+- Default Fonts are configured with easy-to-read NanumGothic Fonts.
+- All installations and configurations are done on build.
+- Base images are modified versions of [scottyhardy/docker-remote-desktop](https://github.com/scottyhardy/docker-remote-desktop) and [scottyhardy/docker-wine](https://github.com/scottyhardy/docker-wine).
+
+## Usage
+
+using `docker`:
 
 ```bash
 docker run -it \
@@ -17,4 +20,22 @@ docker run -it \
   --volume="${XAUTHORITY:-${HOME}/.Xauthority}:/root/.Xauthority:ro" \
   --volume="/tmp/.X11-unix:/tmp/.X11-unix:ro" \
   jeewangue/docker-kakaotalk
+```
+
+using `docker-compose`:
+
+```bash
+docker-compose up
+```
+
+## Build
+
+build process uses [buildx-bake](https://docs.docker.com/engine/reference/commandline/buildx_bake/) to combine multiple separated Dockerfiles into one target.
+
+```bash
+# to see the graph of build process
+make print
+
+# to build your own image from clean ubuntu
+make build
 ```

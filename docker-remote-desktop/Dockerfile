@@ -4,8 +4,9 @@
 ARG TAG=latest
 FROM ubuntu:$TAG as builder
 
-RUN --mount=type=cache,target=/var/cache/apt \
-    --mount=type=cache,target=/var/lib/apt \
+RUN rm -f /etc/apt/apt.conf.d/docker-clean; echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
+RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
+    --mount=type=cache,sharing=locked,target=/var/lib/apt \
     sed -i -E 's/^# deb-src /deb-src /g' /etc/apt/sources.list \
     && apt-get update \
     && DEBIAN_FRONTEND="noninteractive" apt-get install -y --no-install-recommends \
@@ -14,16 +15,20 @@ RUN --mount=type=cache,target=/var/cache/apt \
     git \
     libpulse-dev \
     pulseaudio \
+    python3 \
+    python3-pip \
     && apt-get build-dep -y pulseaudio \
     && apt-get source pulseaudio
 
-RUN cd /pulseaudio-$(pulseaudio --version | awk '{print $2}') \
-    && ./configure
+RUN mv $(find / -maxdepth 1 -type d -name 'pulseaudio*') /pulseaudio
+RUN cd /pulseaudio \
+    && pip3 install meson \
+    && meson build
 
 RUN git clone https://github.com/neutrinolabs/pulseaudio-module-xrdp.git /pulseaudio-module-xrdp \
     && cd /pulseaudio-module-xrdp \
     && ./bootstrap \
-    && ./configure PULSE_DIR=/pulseaudio-$(pulseaudio --version | awk '{print $2}') \
+    && ./configure PULSE_DIR=/pulseaudio \
     && make \
     && make install
 
@@ -31,8 +36,9 @@ RUN git clone https://github.com/neutrinolabs/pulseaudio-module-xrdp.git /pulsea
 # Build the final image
 FROM ubuntu:$TAG
 
-RUN --mount=type=cache,target=/var/cache/apt \
-    --mount=type=cache,target=/var/lib/apt \
+RUN rm -f /etc/apt/apt.conf.d/docker-clean; echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
+RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
+    --mount=type=cache,sharing=locked,target=/var/lib/apt \
     apt-get update \
     && DEBIAN_FRONTEND="noninteractive" apt-get install -y --no-install-recommends \
     dbus-x11 \

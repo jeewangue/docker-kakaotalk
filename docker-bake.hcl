@@ -3,7 +3,7 @@ variable "TAG" {
 }
 
 group "default" {
-  targets = ["docker-remote-desktop", "docker-wine", "docker-kakaotalk"]
+  targets = ["docker-kakaotalk"]
 }
 
 target "docker-remote-desktop" {
