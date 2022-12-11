@@ -76,7 +76,7 @@ jobs:
             *.labels.org.opencontainers.image.created=${{ steps.meta.outputs.build_date }}
             *.labels.org.opencontainers.image.revision=${{ github.sha }}
             *.labels.org.opencontainers.image.licenses=${{ github.event.repository.license.spdx_id }}
-            *.tags=${{ steps.meta.outputs.tags }}
+            *.tags=[${{ steps.meta.outputs.tags }}]
             *.args.VERSION=${{ steps.meta.outputs.version }}
             *.args.COMMIT_HASH=${{ steps.meta.outputs.commit_hash }}
             *.args.BUILD_DATE=${{ steps.meta.outputs.build_date }}
