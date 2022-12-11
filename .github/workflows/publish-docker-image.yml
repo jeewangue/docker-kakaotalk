@@ -63,6 +63,8 @@ jobs:
       - name: Build and push
         uses: docker/bake-action@v2
         with:
+          files: docker-bake.hcl
+          targets: default
           push: ${{ github.event_name == 'push' }}
           set: |
             *.platform=linux/amd64,linux/arm64
