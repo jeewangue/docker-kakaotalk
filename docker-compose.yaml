@@ -4,6 +4,7 @@ services:
   kakaotalk:
     image: jeewangue/docker-kakaotalk
     restart: on-failure
+    ipc: host
     network_mode: host
     environment:
       - DISPLAY=${DISPLAY}
