@@ -2,16 +2,21 @@ version: "3.8"
 
 services:
   kakaotalk:
-    image: jeewangue/docker-kakaotalk
+    # image: jeewangue/docker-kakaotalk
+    image: test
     restart: on-failure
     ipc: host
     network_mode: host
+    privileged: true
     environment:
       - DISPLAY=${DISPLAY}
     volumes:
-      - ${XAUTHORITY}:/root/.Xauthority:ro
+      - ${XAUTHORITY}:/home/wineuser/.Xauthority:ro
       - /tmp/.X11-unix:/tmp/.X11-unix:ro
-      - ./volumes/Kakao:/home/wineuser/.wine/drive_c/users/wineuser/AppData/Local/Kakao
+      # - ./volumes/Kakao:/home/wineuser/.wine/drive_c/users/wineuser/AppData/Local/Kakao
+    # command:
+    # - wine
+    # - "/home/wineuser/.wine/drive_c/Program Files/Kakao/KakaoTalk/KakaoTalk.exe"
     command:
-      - wine
-      - "/home/wineuser/.wine/drive_c/Program Files/Kakao/KakaoTalk/KakaoTalk.exe"
+      - sleep
+      - infinity
